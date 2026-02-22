@@ -10,16 +10,6 @@ class FiniteAutomaton:
 
         #Initialize the Finite Automaton.
 
-        """
-        Args:
-            states: Set of states
-            alphabet: Set of symbols (terminals)
-            transitions: Transition function as dictionary
-                        {(state, symbol): next_state} for DFA or
-                        {(state, symbol): {set of next_states}} for NFA
-            initial_state: Starting state
-            final_states: Set of accepting states
-        """
         self.Q = states
         self.Sigma = alphabet
         self.delta = transitions
