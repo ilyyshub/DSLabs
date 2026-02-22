@@ -9,7 +9,6 @@ class FiniteAutomaton:
                  initial_state: str, final_states: Set[str]):
 
         #Initialize the Finite Automaton.
-
         self.Q = states
         self.Sigma = alphabet
         self.delta = transitions
