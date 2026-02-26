@@ -1,0 +1,15 @@
+digraph FiniteAutomaton {
+    rankdir=LR;
+    node [shape = circle];
+    node [shape = doublecircle]; "{q4}" "{q1,q4}";
+    node [shape = circle];
+    "" [shape=none];
+    "" -> "{q0}";
+    "{q0}" -> "{q1}" [label="a"];
+    "{q1,q2,q3}" -> "{q1,q4}" [label="a"];
+    "{q1,q2,q3}" -> "{q1,q2,q3}" [label="b"];
+    "{q1,q2}" -> "{q4}" [label="a"];
+    "{q1,q2}" -> "{q1,q2,q3}" [label="b"];
+    "{q1,q4}" -> "{q1,q2}" [label="b"];
+    "{q1}" -> "{q1,q2}" [label="b"];
+}
