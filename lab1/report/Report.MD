@@ -1,8 +1,8 @@
 # Laboratory Work #1: Regular Grammars and Finite Automata
 
-**Course:** Formal Languages & Finite Automata  
-**Author:** Ciocanu Ilinca 
-**Variant:** 6  
+**Course:** Formal Languages & Finite Automata
+**Author:** Ciocanu Ilinca
+**Variant:** 6
 
 ---
 
@@ -18,54 +18,35 @@
 
 ## Objectives
 
-The main objectives of this laboratory work were:
+The primary objective of this scholarly endeavor was to establish a rigorous foundational understanding of formal languages and their associated computational models, with particular emphasis on the theoretical and practical relationship between regular grammars and finite automata. To that end, this laboratory undertaking was structured around a set of interrelated academic and engineering goals.
 
-1. **Understand formal languages** - Learn what constitutes a formal language and its components (alphabet, vocabulary, grammar)
-2. **Implement a Grammar class** - Create a type/class to represent a formal grammar with its productions
-3. **Generate strings** - Implement functionality to generate valid strings from the language defined by the grammar
-4. **Grammar to FA conversion** - Convert a Grammar object to a Finite Automaton
-5. **String validation** - Implement a method to check if strings belong to the language accepted by the finite automaton
+The first and most foundational objective was to develop a thorough comprehension of what constitutes a formal language—encompassing its constituent components such as the terminal alphabet, the broader vocabulary of derivable strings, and the generative grammar that governs syntactic formation. Building upon this theoretical groundwork, the second objective was to design and implement a software class capable of faithfully representing a formal grammar, complete with its production rule system, terminal and non-terminal symbol sets, and designated start symbol.
+
+Once a suitable Grammar class had been constructed, the third objective called for the implementation of a string generation mechanism—a procedure by which the grammar's production rules could be applied in a systematic, derivation-based fashion to produce well-formed strings belonging to the defined language. The fourth objective extended this work into the domain of automata theory, requiring the algorithmic conversion of the Grammar object into a structurally equivalent Finite Automaton. Finally, the fifth objective demanded the implementation of a membership-testing procedure, enabling the constructed automaton to determine whether an arbitrary input string belongs to the language it accepts—thereby closing the loop between generative and recognitive formalisms.
 
 ---
 
 ## Theory
 
 ### Formal Language
-A **formal language** is defined by:
-- **Alphabet (Σ)**: A finite set of symbols/characters
-- **Vocabulary (V)**: Set of valid words formed from the alphabet
-- **Grammar (G)**: Set of rules (productions) that define how to form valid strings
+
+In the discipline of formal language theory, a **formal language** is understood to be a mathematically precise construct defined over a finite set of symbols. Such a language is characterized by three principal components: its **Alphabet (Σ)**, which constitutes the finite, non-empty set of atomic symbols from which all strings are composed; its **Vocabulary (V)**, representing the set of all valid words or strings derivable from the alphabet according to prescribed rules; and its **Grammar (G)**, which encodes the production rules governing the syntactic construction of valid strings within the language. The grammar serves as the generative engine of the entire formalism, and its properties determine the expressive power and complexity class of the language it defines.
 
 ### Grammar Components
-A grammar G is formally defined as a 4-tuple: **G = (V_N, V_T, P, S)** where:
-- **V_N**: Set of non-terminal symbols (variables)
-- **V_T**: Set of terminal symbols (alphabet)
-- **P**: Set of production rules
-- **S**: Start symbol (S ∈ V_N)
+
+A grammar G is formally characterized as a 4-tuple **G = (V_N, V_T, P, S)**, wherein each component plays a distinct and indispensable role. **V_N** denotes the finite set of non-terminal symbols—also referred to as syntactic variables—which appear as intermediate placeholders during the derivation process and are ultimately replaced through the application of production rules. **V_T** represents the set of terminal symbols, which constitute the actual alphabet of the language and appear in the final derived strings without further substitution. **P** designates the finite set of production rules, each of which specifies a valid substitution from a string containing non-terminals to another string. **S** is the distinguished start symbol, an element of V_N from which all derivations must originate.
 
 ### Regular Grammar
-A **regular grammar** is a grammar where all production rules are of one of these forms:
-- A → aB (right-linear)
-- A → a
-- A → ε (epsilon/empty string)
 
-Where A, B ∈ V_N and a ∈ V_T.
+A **regular grammar** occupies the lowest rung in the Chomsky hierarchy of formal grammars and is defined by the constraint that all production rules must conform to one of a small set of permissible forms. In a right-linear regular grammar—the variant employed in this laboratory work—each production rule must take one of the following forms: **A → aB**, where A and B are non-terminal symbols and a is a terminal symbol; **A → a**, where the non-terminal is replaced by a single terminal; or **A → ε**, wherein the non-terminal derives the empty string. This restrictive structure guarantees that the language generated by a regular grammar is precisely a regular language, and that an equivalent finite automaton can always be algorithmically constructed to recognize it.
 
 ### Finite Automaton
-A **Finite Automaton (FA)** is defined as a 5-tuple: **FA = (Q, Σ, δ, q0, F)** where:
-- **Q**: Finite set of states
-- **Σ**: Alphabet (input symbols)
-- **δ**: Transition function δ: Q × Σ → Q (for DFA) or δ: Q × Σ → 2^Q (for NFA)
-- **q0**: Initial state (q0 ∈ Q)
-- **F**: Set of final/accepting states (F ⊆ Q)
+
+A **Finite Automaton (FA)** is a mathematical model of computation defined as a 5-tuple **FA = (Q, Σ, δ, q0, F)**, in which each component carries precise semantic meaning. **Q** denotes the finite set of states representing the discrete configurations of the machine. **Σ** is the input alphabet, corresponding to the set of symbols over which the automaton operates. **δ** is the transition function, which maps pairs of states and input symbols to successor states; in a deterministic automaton (DFA), this mapping yields a single state, whereas in a non-deterministic automaton (NFA), it yields a subset of states. **q0** is the unique initial state from which computation begins, and **F** is the set of final or accepting states, membership in which at the conclusion of processing an input string constitutes acceptance of that string into the recognized language.
 
 ### Grammar to FA Conversion
-For a right-linear regular grammar:
-1. Each non-terminal becomes a state
-2. Add a final state qf
-3. For production A → aB: add transition δ(A, a) = B
-4. For production A → a: add transition δ(A, a) = qf
-5. Start symbol S becomes initial state q0
+
+The conversion of a right-linear regular grammar into an equivalent finite automaton proceeds via a well-established constructive algorithm. Each non-terminal symbol in V_N is mapped to a corresponding state in Q. An additional final state, conventionally designated q_f, is introduced to serve as the sole accepting state. For each production of the form **A → aB**, a transition **δ(A, a) = B** is added to the automaton's transition function. For each production of the form **A → a**, a transition **δ(A, a) = q_f** is added, directing computation toward the final state upon consumption of the terminal symbol. The start symbol S of the grammar maps directly to the initial state q0 of the automaton. This construction ensures that every string derivable from the grammar is precisely accepted by the resulting automaton, and vice versa.
 
 ---
 
@@ -106,17 +87,9 @@ class Grammar:
         """Convert grammar to equivalent Finite Automaton"""
 ```
 
-**String Generation Algorithm:**
-1. Start with the start symbol S
-2. Find leftmost non-terminal in current string
-3. Randomly select a production for that non-terminal
-4. Replace the non-terminal with the production
-5. Repeat until no non-terminals remain or max depth reached
+The string generation algorithm operates through an iterative leftmost-derivation procedure. The process commences with the start symbol S as the initial sentential form. At each step, the algorithm identifies the leftmost non-terminal present in the current sentential form and randomly selects one of its applicable production rules from P. The selected non-terminal is then substituted with the right-hand side of the chosen production, yielding a new sentential form. This process continues until the sentential form contains no remaining non-terminal symbols—at which point a complete terminal string has been derived—or until a configurable maximum derivation depth is reached, a safeguard against non-terminating derivations in grammars with recursive productions.
 
-**Grammar to FA Conversion:**
-- Creates states Q = V_N ∪ {qf}
-- Maps each production rule to appropriate transitions
-- Handles non-determinism when multiple productions exist for same symbol
+The grammar-to-automaton conversion procedure instantiates the set of states Q as the union of V_N and the singleton set containing the final state q_f. It subsequently iterates over all production rules in P, translating each rule into its corresponding automaton transition in accordance with the right-linear conversion algorithm described in the Theory section. Where multiple productions share the same left-hand non-terminal and initial terminal symbol, the resulting transition maps to a set of possible successor states rather than a single one, introducing non-determinism into the automaton.
 
 #### 2. Finite Automaton Class (`finite_automaton.py`)
 
@@ -129,32 +102,17 @@ class FiniteAutomaton:
         """Check if string is accepted by the automaton using state transitions"""
 ```
 
-**String Acceptance Algorithm (NFA):**
-1. Start with set of current states = {q0}
-2. For each symbol in input string:
-   - For each current state, find all possible next states
-   - Update current states to the union of all next states
-3. Accept if any final state is in current states set
+The string acceptance algorithm is implemented as a generalized NFA simulation using set-based state tracking. The computation begins by initializing the set of current states to the singleton {q0}. For each symbol encountered in the input string, the algorithm verifies that the symbol belongs to the alphabet Σ, after which it computes the set of all reachable successor states by consulting the transition function for every state in the current state set. The union of all such successor states becomes the new current state set. If at any point the current state set becomes empty—indicating that no valid transitions exist for the given symbol from any reachable state—the string is immediately rejected. Upon exhausting all input symbols, the algorithm determines acceptance by testing whether the intersection of the current state set and the final state set F is non-empty. This set-based approach correctly handles both deterministic and non-deterministic transition structures within a unified algorithmic framework.
 
 #### 3. Main Program (`main.py`)
 
-Demonstrates:
-- Grammar instantiation with Variant 6 data
-- Generation of 5 valid strings
-- Conversion to Finite Automaton
-- Validation of generated and test strings
+The client program serves as an integration harness that exercises the full pipeline of grammar instantiation, string generation, automaton construction, and membership verification using the Variant 6 grammar specification.
 
 ### Key Implementation Details
 
-**Non-Deterministic Finite Automaton (NFA):**
-The grammar has a non-deterministic aspect:
-- Production `I → e` creates: δ(I, e) = qf
-- Production `I → eK` creates: δ(I, e) = K
+**Non-Deterministic Finite Automaton (NFA):** The grammar defined for Variant 6 gives rise to a structurally non-deterministic finite automaton, and this non-determinism manifests in a particularly instructive way through the treatment of state I under input symbol `e`. Examining the production rules for non-terminal I, one observes two distinct rules that share the same initial terminal symbol: the production **I → e**, which generates a single terminal and thus necessitates a transition to the final state q_f, and the production **I → eK**, which generates a terminal followed by a non-terminal and thus necessitates a transition to state K. When both of these productions are translated into automaton transitions during the grammar-to-FA conversion procedure, the result is that the transition function δ(I, e) must simultaneously map to both K and q_f—a situation that is definitionally incompatible with the deterministic model, wherein each state-symbol pair admits at most one successor state.
 
-This results in δ(I, e) = {K, qf}, making it an NFA. The implementation handles this by:
-- Storing transitions as sets of states
-- Using a set-based state tracking algorithm
-- Supporting both DFA and NFA formats
+This non-determinism is captured formally as **δ(I, e) = {K, q_f}**, representing a transition from state I on input `e` to the set of states {K, q_f}. The practical consequence is that, when processing a string that has navigated to state I and encounters the symbol `e`, the automaton must pursue both possible computational paths simultaneously: one path that accepts immediately (via q_f) and one that continues to state K awaiting further input. The set-based NFA simulation algorithm handles this gracefully by maintaining the full set of concurrently active states at every step, ensuring that neither possible continuation is prematurely discarded. This design accurately models the semantic ambiguity introduced by the two competing productions and correctly accepts both strings that terminate after `e` (such as `ce`) and strings that proceed through K before terminating (such as `cem`).
 
 ---
 
@@ -191,17 +149,18 @@ Transitions:
 
 ### String Validation Results
 
-All generated strings were successfully validated:
-- ✓ `cbccfe` - ACCEPTED
-- ✓ `cem` - ACCEPTED
-- ✓ `cfennm` - ACCEPTED
-- ✓ `cbnccfe` - ACCEPTED
-- ✓ `cbccfenm` - ACCEPTED
+All generated strings were successfully validated by the constructed finite automaton, confirming the behavioral equivalence between the grammar and its automaton representation. The following table summarizes the acceptance outcomes for both the generated strings and a selection of additional test cases:
 
-Additional test cases:
-- ✓ `ce` - ACCEPTED (S → cI → ce)
-- ✗ `abc` - REJECTED (doesn't start with 'c')
-- ✗ `c` - REJECTED (incomplete derivation)
+| String | Result | Derivation Path |
+|---|---|---|
+| `cbccfe` | ACCEPTED | S → cI → cbJ → cbcS → cbcI → cbcfI → cbcfe |
+| `cem` | ACCEPTED | S → cI → ceK → cem |
+| `cfennm` | ACCEPTED | S → cI → cfI → cfennm |
+| `cbnccfe` | ACCEPTED | S → cI → cbJ → cbncS → … |
+| `cbccfenm` | ACCEPTED | S → cI → cbJ → … |
+| `ce` | ACCEPTED | S → cI → ce |
+| `abc` | REJECTED | Does not commence with terminal `c` |
+| `c` | REJECTED | Incomplete derivation; no accepting state reachable |
 
 ### Example Derivations
 
@@ -219,34 +178,21 @@ S → cI → cbJ → cbcS → cbcI → cbcfI → cbcfe
 
 ## Conclusions
 
-This laboratory work successfully demonstrated:
+This laboratory work has successfully demonstrated the theoretical and practical equivalence between regular grammars and finite automata through a complete software implementation of both formalisms applied to the Variant 6 grammar specification. Several substantive conclusions may be drawn from the work undertaken.
 
-1. **Grammar Implementation**: Created a functional Grammar class that correctly represents formal grammar with non-terminals, terminals, productions, and start symbol.
+With respect to grammar implementation, the development of a functional Grammar class confirmed that a formal grammar can be faithfully encoded as a computational object, with its production rules admitting both random string generation and systematic structural transformation. The random derivation algorithm proved capable of producing a diverse range of valid strings by nondeterministically selecting among applicable productions at each derivation step—demonstrating the generative power latent within even a small set of recursive rules.
 
-2. **String Generation**: Implemented a random derivation algorithm that generates valid strings by repeatedly applying production rules until only terminals remain.
+The grammar-to-automaton conversion procedure empirically validated the classical theoretical result that every regular grammar admits an equivalent finite automaton. The conversion algorithm, applied to the Variant 6 grammar, yielded a five-state automaton whose acceptance behavior was verified to coincide exactly with the grammar's generative behavior across all tested inputs.
 
-3. **Grammar-FA Equivalence**: Successfully converted a regular grammar to an equivalent Finite Automaton, handling the non-deterministic nature arising from multiple productions.
+Of particular theoretical significance was the emergence of non-determinism from the pair of productions **I → e** and **I → eK**, which share the terminal prefix `e` yet differ in their structural continuation. This confluence necessitated the construction of an NFA rather than a DFA, with the transition **δ(I, e) = {K, q_f}** serving as the canonical example of a non-deterministic branching point. The set-based simulation algorithm, which tracks all concurrently active states throughout the processing of an input string, was confirmed to correctly resolve this non-determinism and accept precisely the strings belonging to the defined language.
 
-4. **NFA Support**: Recognized and properly handled non-determinism in the FA (when I → e and I → eK both exist), implementing an NFA acceptance algorithm using set-based state tracking.
-
-5. **Validation**: Confirmed that all strings generated by the grammar are accepted by the converted automaton, verifying the correctness of both implementations.
-
-### Key Learnings:
-- Regular grammars and finite automata are equivalent in expressive power
-- Non-determinism can arise naturally from grammar productions
-- NFA acceptance requires tracking multiple possible states simultaneously
-- Python's set operations are ideal for implementing NFA algorithms
-
-### Challenges Faced:
-- Initially implemented as DFA, which couldn't handle the non-determinism from `I → e` and `I → eK`
-- Resolved by updating to support NFA with set-based transitions
-- Learned the importance of considering all production rules when designing the automaton
+Validation testing further confirmed that all strings generated by the grammar are accepted by the automaton and that strings not belonging to the language are correctly rejected, providing empirical assurance of implementation correctness. Among the key insights gained through this work is the appreciation that Python's native set operations constitute an elegant and efficient substrate for implementing NFA simulation algorithms, and that non-determinism, rather than being an implementation defect, is a natural and theoretically meaningful artifact of the grammar-to-automaton conversion process.
 
 ---
 
 ## References
 
 1. Course materials: "Intro to formal languages. Regular grammars. Finite Automata" by Cretu Dumitru
-2. Hopcroft, J. E., Motwani, R., & Ullman, J. D. (2006). *Introduction to Automata Theory, Languages, and Computation*
-3. Sipser, M. (2012). *Introduction to the Theory of Computation*
-4. Python Documentation: https://docs.python.org/3/
+2. Hopcroft, J. E., Motwani, R., & Ullman, J. D. (2006). *Introduction to Automata Theory, Languages, and Computation*. Pearson Education.
+3. Sipser, M. (2012). *Introduction to the Theory of Computation* (3rd ed.). Cengage Learning.
+4. Python Software Foundation. (2024). *Python 3 Documentation*. https://docs.python.org/3/
