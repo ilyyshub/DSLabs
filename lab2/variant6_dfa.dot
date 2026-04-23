@@ -1,7 +1,7 @@
 digraph FiniteAutomaton {
     rankdir=LR;
     node [shape = circle];
-    node [shape = doublecircle]; "{q4}" "{q1,q4}";
+    node [shape = doublecircle]; "{q1,q4}" "{q4}";
     node [shape = circle];
     "" [shape=none];
     "" -> "{q0}";

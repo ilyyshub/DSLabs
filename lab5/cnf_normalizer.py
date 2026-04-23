@@ -276,6 +276,17 @@ class CNFNormalizer:
 
     def _binarize(self, grammar: CFG) -> CFG:
         new_productions: Dict[str, Set[Production]] = {nt: set() for nt in grammar.non_terminals}
+        pair_cache: Dict[Tuple[str, str], str] = {}
+
+        def get_pair_nt(left_sym: str, right_sym: str) -> str:
+            pair = (left_sym, right_sym)
+            if pair in pair_cache:
+                return pair_cache[pair]
+            new_nt = self._fresh_nonterminal(grammar, "X_")
+            pair_cache[pair] = new_nt
+            new_productions.setdefault(new_nt, set()).add(pair)
+            return new_nt
+
         original_items = list(grammar.productions.items())
         for left, rhs_set in original_items:
             for rhs in rhs_set:
@@ -283,15 +294,11 @@ class CNFNormalizer:
                     new_productions[left].add(rhs)
                     continue
 
-                current_left = left
                 symbols = list(rhs)
-                while len(symbols) > 2:
-                    new_nt = self._fresh_nonterminal(grammar, "X_")
-                    first = symbols.pop(0)
-                    new_productions.setdefault(current_left, set()).add((first, new_nt))
-                    current_left = new_nt
-                    new_productions.setdefault(current_left, set())
-                new_productions[current_left].add(tuple(symbols))
+                current_nt = get_pair_nt(symbols[-2], symbols[-1])
+                for i in range(len(symbols) - 3, 0, -1):
+                    current_nt = get_pair_nt(symbols[i], current_nt)
+                new_productions[left].add((symbols[0], current_nt))
 
         for nt in grammar.non_terminals:
             new_productions.setdefault(nt, set())
