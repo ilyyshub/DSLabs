@@ -19,35 +19,68 @@ This repository contains laboratory works for the **Formal Languages & Finite Au
 
 ```
 FLFA-Labs/
-├── README.md                 # This file
-├── lab1/                     # Laboratory Work #1
-│   ├── src/
-│   │   ├── grammar.py            # Grammar class implementation
-│   │   ├── finite_automaton.py   # Finite Automaton class
-│   │   └── main.py               # Main demonstration program
-│   └── report/
-│       └── REPORT.md             # Lab 1 report
-│
-├── lab2/                     # Laboratory Work #2
-│   ├── grammar.py            # Grammar class with Chomsky classification
-│   ├── finite_automaton.py   # FA with NFA→DFA conversion
-│   ├── main.py               # Main demonstration program
-│   ├── variant6_nfa.png
+├── LICENSE
+├── README.md
+├── lab1/
+│   ├── report/
+│   │   └── Report.MD
+│   └── src/
+│       ├── finite_automaton.py
+│       ├── grammar.py
+│       └── main.py
+├── lab2/
+│   ├── finite_automaton.py
+│   ├── grammar.py
+│   ├── main.py
+│   ├── report2.MD
+│   ├── variant6_dfa.dot
 │   ├── variant6_dfa.png
 │   ├── variant6_nfa.dot
-│   ├── variant6_dfa.dot
-│   └── report2.md            # Lab 2 report
-│
-├── lab3/                     # Laboratory Work #3
-│   ├── lexer.py              # Lexer / scanner implementation
-│   ├── tokens.py             # Token dataclass and TT enum
-│   ├── constants.py          # Keyword dictionary
-│   ├── main.py               # Demo and edge-case runner
-│   └── raport/
-            ├──report_lab3.md
-│
-└── ...
+│   └── variant6_nfa.png
+├── lab3/
+│   ├── constants.py
+│   ├── lexer.py
+│   ├── main.py
+│   ├── raport/
+│   │   └── report_lab3.md
+│   └── tokens.py
+├── lab4/
+│   ├── ast_def.py
+│   ├── main.py
+│   ├── regex_generator.py
+│   ├── regex_parser.py
+│   └── report4/
+│       └── lab4_report.md
+├── lab5/
+│   ├── cnf_normalizer.py
+│   ├── main.py
+│   ├── report5/
+│   │   └── lab5_report.md
+│   └── test_cnf.py
+└── lab6/
+    ├── ast_nodes.py
+    ├── lexer.py
+    ├── main.py
+    ├── parser.py
+    ├── pretty_print.py
+    ├── report6/
+    │   └── lab6_report.md
+    ├── test_parser.py
+    └── tokens.py
 ```
+
+---
+
+## 🗂️ Quick Lab Summaries
+
+| Lab | Topic | Quick summary |
+|---|---|---|
+| Lab 1 | Regular Grammars and Finite Automata | Builds a regular grammar, generates valid strings, converts it to a finite automaton, and checks language membership. |
+| Lab 2 | Determinism in Finite Automata | Classifies grammars, converts FA to regular grammar, detects NFA vs DFA, and applies subset construction. |
+| Lab 3 | Lexer & Scanner | Implements a hand-written lexer for a small DSL with keywords, literals, operators, comments, and edge-case handling. |
+| Lab 4 | Regular Expression Generation | Parses regular expressions into an AST and generates valid strings from the expression tree with tracing support. |
+| Lab 5 | Chomsky Normal Form | Normalizes a context-free grammar into CNF through epsilon, unit, inaccessible, and non-productive symbol elimination. |
+| Lab 6 | Parser & AST Construction | Extends the DSL with parsing support and builds an abstract syntax tree for statements, expressions, and blocks. |
 
 ---
 
@@ -79,7 +112,7 @@ Productions:
     K → nK | m
 ```
 
-[📄 View Lab 1 Report](./lab1/report/REPORT.md)
+[📄 View Lab 1 Report](./lab1/report/Report.MD)
 
 ---
 
@@ -119,7 +152,7 @@ Transitions:
     δ(q3, a) = q1
 ```
 
-[📄 View Lab 2 Report](./lab2/report2.md)
+[📄 View Lab 2 Report](./lab2/report2.MD)
 
 ---
 
@@ -191,7 +224,119 @@ class TT(Enum):
     COMMENT, EOF, UNKNOWN             # Special
 ```
 
-[📄 View Lab 3 Report](./lab3/README.md)
+[📄 View Lab 3 Report](./lab3/raport/report_lab3.md)
+
+---
+
+### Lab 4: Regular Expression Generation
+**Status:** ✅ Completed  
+**Variant:** 2
+
+**Objectives:**
+- Parse regular expressions dynamically at runtime
+- Build an Abstract Syntax Tree (AST) representation of each regex
+- Generate valid strings that belong to the described regular language
+- Validate generated strings against Python regex matching
+- Provide a step-by-step processing trace for generation (bonus)
+
+**Key Features:**
+- **Recursive-descent regex parser** with precedence handling
+- **AST-based generation** using literals, concatenation, alternation, and quantifiers
+- **Unicode superscript quantifier support** (`²`, `³`, etc.)
+- **Configurable cap for unbounded repetition** (`*`, `+`) to avoid infinite generation
+- **Generation trace logging** for explainable output
+
+**Key Results:**
+- ✅ Generated and validated 10 unique samples per regex variant
+- ✅ Correct handling of optional, exact, one-or-more, and zero-or-more quantifiers
+- ✅ Correct interpretation of alternation groups and nested expressions
+- ✅ All generated strings validated with `re.fullmatch`
+
+**Variant 2 Regex Set:**
+```
+1) M?N²(O|P)³Q*R*
+2) (X|Y|Z)³8⁺(9|0)
+3) (H|i)(J|K)L*N?
+```
+
+[📄 View Lab 4 Report](./lab4/report4/lab4_report.md)
+
+---
+
+### Lab 5: Chomsky Normal Form (CNF)
+**Status:** ✅ Completed  
+**Variant:** 6
+
+**Objectives:**
+- Implement a reusable CFG normalization pipeline to CNF
+- Apply the full transformation sequence to Variant 6 grammar
+- Display intermediate grammars after every normalization stage
+- Verify that the final grammar satisfies strict CNF constraints
+- Support generic grammars beyond the assignment-specific input (bonus)
+
+**Key Features:**
+- **Epsilon-production elimination** via nullable-symbol fixpoint computation
+- **Unit-production elimination** using transitive unit-closure
+- **Inaccessible and non-productive symbol elimination**
+- **Strict CNF conversion** with terminal lifting and rule binarization
+- **Step-by-step normalization trace** and final CNF validator
+
+**Key Results:**
+- ✅ Variant 6 grammar fully normalized to CNF
+- ✅ Final verification output: **Is final grammar in CNF? YES**
+- ✅ Inaccessible symbol `E` correctly removed during simplification
+- ✅ Generic normalizer validated with additional unit tests
+
+**Variant 6 Grammar (input):**
+```
+V_N = {S, A, B, C, E}
+V_T = {a, b}
+Productions:
+    S → aB | AC
+    A → a | ASC | BC
+    B → b | bS
+    C → ε | BA
+    E → bB
+```
+
+[📄 View Lab 5 Report](./lab5/report5/lab5_report.md)
+
+---
+
+### Lab 6: Parser & Abstract Syntax Tree
+**Status:** ✅ Completed
+
+**Objectives:**
+- Extend the lexer-based DSL pipeline with syntactic analysis
+- Implement recursive-descent parsing for statements and expressions
+- Build a typed AST for declarations, control flow, calls, and literals
+- Enforce operator precedence and associativity in expression parsing
+- Demonstrate the end-to-end lexer → parser → AST workflow with tests
+
+**Key Features:**
+- **Regex-driven lexer** integrated with parser-ready token taxonomy
+- **Recursive-descent parser** for `let`, `print`, `return`, `if/else`, `while`, and `fn`
+- **AST node hierarchy** for statements and expressions
+- **Precedence-aware expression parser** (`or` → `and` → comparison → arithmetic → unary)
+- **Pretty-printers** for token streams and tree-style AST visualization
+
+**Key Results:**
+- ✅ Sample DSL program tokenized and parsed into a structured AST
+- ✅ Correct parsing of nested blocks, function declarations, and function calls
+- ✅ Support for arrays, maps, booleans, strings, numeric literals, and logical expressions
+- ✅ Automated parser tests validate lexical categories and AST shape
+
+**Processed DSL constructs:**
+```
+let x = expression
+print expression
+return expression
+fn name(params) ... end
+if condition ... else ... end
+while condition ... end
+```
+
+[📄 View Lab 6 Report](./lab6/report6/lab6_report.md)
 
 ---
 
@@ -247,6 +392,35 @@ python main.py
 
 The program will tokenise the embedded sample program and print the full token stream, then run a suite of edge-case tests covering numeric literals, escape sequences, all comparison operators, nested function calls, and error handling.
 
+### Running Lab 4
+
+```bash
+cd lab4
+python main.py
+```
+
+The program parses each regex into an AST, generates valid strings for each pattern, and prints a processing trace for one generated sample.
+
+### Running Lab 5
+
+```bash
+cd lab5
+python main.py
+python -m unittest -v test_cnf.py
+```
+
+The program prints each CNF normalization stage for Variant 6 and validates the final grammar; the tests check both variant-specific and generic normalization behavior.
+
+### Running Lab 6
+
+```bash
+cd lab6
+python main.py
+python -m unittest -v test_parser.py
+```
+
+The program tokenizes and parses the sample DSL program, prints the AST tree, and runs parser-focused unit tests.
+
 ---
 
 ## 💻 Implementation Details
@@ -258,9 +432,11 @@ The program will tokenise the embedded sample program and print the full token s
 - **Python 3.8+** with type hints
 - **Object-oriented design** patterns
 - **Graphviz** for automata visualization (Lab 2)
-- **unittest** framework for comprehensive testing (Lab 2)
+- **unittest** framework for automated testing (Labs 2, 5, 6)
 - **Collections library** (defaultdict, deque) for efficient algorithms
 - **Enum** module for expressive token type definitions (Lab 3)
+- **re (regex) module** for independent output validation (Lab 4) and token pattern matching (Lab 6)
+- **dataclasses** for compact AST and grammar data models (Labs 4, 5, 6)
 
 ### Algorithms Implemented
 
@@ -283,6 +459,27 @@ The program will tokenise the embedded sample program and print the full token s
 - Lossless token stream (comments and newlines preserved)
 - Graceful error recovery via `UNKNOWN` tokens
 
+**Lab 4:**
+- Recursive-descent regex parsing into an AST
+- AST-driven random string generation
+- Quantifier handling for `?`, `*`, `+`, and exact superscript repetition
+- Alternation and concatenation traversal with generation tracing
+- Independent regex-based membership validation with `re.fullmatch`
+
+**Lab 5:**
+- Nullable-symbol fixpoint computation for ε-elimination
+- Transitive unit-closure for renaming (unit-production) elimination
+- Reachability analysis for inaccessible symbol pruning
+- Productivity analysis for non-productive symbol elimination
+- CNF conversion with terminal lifting and production binarization
+
+**Lab 6:**
+- Regex-driven lexical classification with source-position tracking
+- Recursive-descent statement parsing (`let`, `if/else`, `while`, `fn`, `return`, `print`)
+- Precedence-climbing expression parsing (`or` → `and` → equality/comparison → arithmetic → unary)
+- AST construction for calls, arrays, maps, unary, and binary expressions
+- Tree-style pretty-printing for AST structural inspection
+
 ---
 
 ## 📊 Testing
@@ -301,6 +498,31 @@ python test_automata.py
 
 ### Lab 3
 Edge-case tests embedded in `main.py` covering integer and float literal disambiguation, string escape sequences, all six comparison operators, nested function calls, and unterminated string error reporting.
+
+### Lab 4
+Generation correctness is validated by matching each produced string against the equivalent Python regex with `re.fullmatch`. The demo runs multiple generations per pattern, deduplicates outputs, and confirms all reported samples satisfy the target expression.
+
+```bash
+cd lab4
+python main.py
+```
+
+### Lab 5
+Unit tests in `test_cnf.py` validate the full CNF normalization pipeline, including ε-elimination, unit-production elimination, pruning of inaccessible/non-productive symbols, and final CNF shape checks for both Variant 6 and an additional generic grammar.
+
+```bash
+cd lab5
+python -m unittest -v test_cnf.py
+```
+
+### Lab 6
+Unit tests in `test_parser.py` verify lexical token classification and parser output structure (function declarations, conditional blocks, and expression nodes). The main demo also provides end-to-end validation by tokenizing and parsing a representative DSL program and printing the resulting AST.
+
+```bash
+cd lab6
+python -m unittest -v test_parser.py
+python main.py
+```
 
 ---
 
